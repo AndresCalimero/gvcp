@@ -1,0 +1,21 @@
+{
+    "debug": true,
+    "url": "https://localhost/",
+    "secure": true,
+    "cli": false,
+    "title": "GVCP",
+    "public_folder": "./public",
+    "error_template": "error.tmpl",
+    "cache_max_age": 604800,
+    "server_info": "GVCP-Server",
+    "stun_turn_server_api": {
+        "url": "https://service.xirsys.com/ice",
+        "ident": "[your user]",
+        "secret": "[your secret token]",
+        "domain": "[your domain]",
+        "application": "[your app name]",
+        "room": "[your room name]",
+        "secure": 1
+    },
+    "room_capacity": 4
+}

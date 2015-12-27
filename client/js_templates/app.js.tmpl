@@ -1,0 +1,315 @@
+/* global SimpleWebRTC */
+/* global bootbox */
+
+var url = '{{url}}';
+
+var request = $.ajax({
+    url: url.match(/\/$/) ? url + 'stun-turn-servers' : url + '/stun-turn-servers',
+    method: 'GET'
+});
+
+request.done(function(peerConnectionConfig) {
+    peerConnectionConfig = JSON.parse(peerConnectionConfig);
+    var colors = ['#FF9000', '#32CD32', '#4682B4', '#C71585'];
+    var remotes = {
+        numRemotes: 0
+    };
+    var localVideo;
+    var query = location.search && location.search.split('?')[1];
+    var room;
+    if (query) {
+        room = query.substr(query.indexOf('room=') + 5);
+    }
+    adjustChatHeight();
+    $('.leftMenu .container').css('visibility', 'visible');
+    $(window).resize(function() {
+        adjustChatHeight();
+        resizeLocalVideo();
+    });
+
+    var webrtc = new SimpleWebRTC({
+        localVideoEl: 'localVideo',
+        remoteVideosEl: '',
+        autoRequestMedia: true,
+        debug: false,
+        detectSpeakingEvents: true,
+        autoAdjustMic: false,
+        peerConnectionConfig: peerConnectionConfig,
+        url: url
+    });
+
+    webrtc.on('readyToCall', function() {
+        if (room) {
+            webrtc.joinRoom(room, function(err) {
+                if (err) {
+                    if (err == 'full') {
+                        bootbox.alert({
+                            title: 'The room is full!',
+                            message: 'Sorry, this room has reached its maximum capacity.',
+                            callback: function() {
+                                location = '/';
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+    // we got access to the camera
+    webrtc.on('localStream', function(stream) {
+        $('#localVideo').bind('loadedmetadata', function() {
+            localVideo = this;
+            resizeLocalVideo();
+        });
+    });
+
+    // we did not get access to the camera
+    webrtc.on('localMediaError', function(err) {
+        if (err) {
+            bootbox.dialog({
+                title: 'We can not access the media!',
+                message: 'You must give permission to this site to make use of the webcam and microphone if you want to join a room.',
+                buttons: {
+                    danger: {
+                        label: "Exit",
+                        className: "btn-danger",
+                        callback: function() {
+                            location = '/';
+                        }
+                    },
+                    main: {
+                        label: "Retry",
+                        className: "btn-primary",
+                        callback: function() {
+                            location.reload();
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    webrtc.on('videoAdded', function(video, peer) {
+        remotes.numRemotes += 1;
+        remotes[peer.id] = {
+            name: 'User #' + remotes.numRemotes,
+            number: remotes.numRemotes
+        };
+
+        var remotesItem = $('#remotes');
+        if (remotesItem.length == 1) {
+            var newClass = 'videoContainer-' + remotes.numRemotes;
+            if (remotes.numRemotes > 1) {
+                var oldClass = 'videoContainer-' + (remotes.numRemotes - 1);
+                $('#remotes').children().toggleClass(oldClass + ' ' + newClass);
+            }
+            var container = $('<div></div>').addClass(newClass).prop('id', 'container_' + peer.id).append(video);
+
+            video.oncontextmenu = function() {
+                return false;
+            };
+
+            addUser(peer, video.src);
+            remotesItem.append(container);
+        }
+    });
+
+    webrtc.on('videoRemoved', function(video, peer) {
+        delete remotes[peer.id];
+        remotes.numRemotes -= 1;
+        var index = 1;
+        for (var remote in remotes) {
+            if (remotes.hasOwnProperty(remote) && remote != 'numRemotes') {
+                remotes[remote].name = 'User #' + index;
+                remotes[remote].number = index++;
+                $('#userContainer_' + remote).find('.userNumber').html('<b>' + remotes[remote].name + '</b>');
+            }
+        }
+
+        $('#container_' + peer.id).remove();
+        $('#userContainer_' + peer.id).remove();
+        if (remotes.numRemotes > 0) {
+            var newClass = 'videoContainer-' + remotes.numRemotes;
+            var oldClass = 'videoContainer-' + (remotes.numRemotes + 1);
+            $('#remotes').children().toggleClass(oldClass + ' ' + newClass);
+        }
+        adjustChatHeight();
+    });
+
+    // local p2p/ice failure
+    webrtc.on('iceFailed', function(peer) {
+        bootbox.dialog({
+            title: 'Connection failure!',
+            message: 'A problem occurred while attempting a connection with all peers.',
+            buttons: {
+                danger: {
+                    label: "Exit room",
+                    className: "btn-danger",
+                    callback: function() {
+                        location = '/';
+                    }
+                },
+                main: {
+                    label: "Retry",
+                    className: "btn-primary",
+                    callback: function() {
+                        location.reload();
+                    }
+                }
+            }
+        });
+    });
+
+    // remote p2p/ice failure
+    webrtc.on('connectivityError', function(peer) {
+        var connstate = $('#userContainer_' + peer.id + ' > .connectionstate');
+        console.log('remote fail', connstate);
+        if (connstate) {
+            connstate.text('Connection failed.');
+        }
+    });
+
+    webrtc.on('speaking', function(peer) {
+        webrtc.sendToAll('speaking');
+    });
+
+    webrtc.on('stoppedSpeaking', function(peer) {
+        webrtc.sendToAll('stoppedSpeaking');
+    });
+
+    webrtc.connection.on('message', function(data) {
+        if (data.type === 'chat') {
+            addChatMessage(data.payload.message, data.from);
+        }
+        else if (data.type === 'speaking') {
+            $('#userContainer_' + data.from).addClass('speaking');
+        }
+        else if (data.type === 'stoppedSpeaking') {
+            $('#userContainer_' + data.from).toggleClass('speaking');
+        }
+    });
+
+    $('#btn-input').keyup(function(e) {
+        if (e.keyCode == 13) {
+            sendMsg();
+        }
+    });
+
+    $('#btn-chat').click(function() {
+        sendMsg();
+    });
+
+    function sendMsg() {
+        var text = $('#btn-input').val();
+        if (text.trim().length > 0) {
+            webrtc.sendToAll('chat', {
+                message: text.trim()
+            });
+            addChatMessage(text.trim());
+            $('#btn-input').val('');
+        }
+    }
+
+    function setRoom(name) {
+        $('#title').text('Room: ' + name);
+        $('#subTitle').html('Link to join: <b>' + location.href + '</b>');
+    }
+
+    function addUser(peer, videoSrc) {
+        if (peer && peer.pc) {
+            var usersContainer = $('#usersContainer');
+            var video = $('<div><video muted autoplay oncontextmenu="return false;" src=' + videoSrc + '></video></div>');
+            var userContainer = $('<div></div>').addClass('userContainer').prop('id', 'userContainer_' + peer.id).append(video);
+            var userInfo = $('<div><span class="userNumber"><b>' + remotes[peer.id].name + '</b></span><br />Status: </div>');
+            var connstate = $('<span></span>').addClass('connectionstate');
+            userInfo.append(connstate);
+            userContainer.append(userInfo);
+
+            peer.pc.on('iceConnectionStateChange', function(event) {
+                switch (peer.pc.iceConnectionState) {
+                    case 'checking':
+                        userContainer.prop('class', 'userContainer connecting-to-peer');
+                        connstate.text('Connecting to peer...');
+                        break;
+                    case 'connected':
+                    case 'completed': // on caller side
+                        userContainer.prop('class', 'userContainer connection-established');
+                        connstate.text('Connection established.');
+                        break;
+                    case 'disconnected':
+                        userContainer.prop('class', 'userContainer disconnected');
+                        connstate.text('Disconnected.');
+                        break;
+                    case 'failed':
+                        userContainer.prop('class', 'userContainer connection-failed');
+                        connstate.text('Connection failed.');
+                        break;
+                    case 'closed':
+                        userContainer.prop('class', 'userContainer connection-closed');
+                        connstate.text('Connection closed.');
+                        break;
+                }
+            });
+            usersContainer.append(userContainer);
+            adjustChatHeight();
+        }
+    }
+
+    function addChatMessage(message, from) {
+        message = $('<div>').text(message).html();
+        var dt = new Date();
+        var time = dt.getHours() + ":" + dt.getMinutes();
+        var lastMsg = $('#chat-list li').last();
+
+        if (lastMsg.length == 1 && ((typeof from === 'undefined' && lastMsg.hasClass('chat_me')) || lastMsg.hasClass('chat_' + from))) {
+            var messageP = lastMsg.find('.chat-body p');
+            var newMessage = messageP.html() + '<br />' + message;
+            messageP.html(newMessage);
+            lastMsg.find('.header small').contents().last().replaceWith(time);
+        }
+        else {
+            var messageItem;
+            if (typeof from === 'undefined') {
+                messageItem = $('<li class="right clearfix chat_me"><span class="chat-img pull-right"><div style="background-color:' + colors[0] + ';"><span>Me</span></div></span><div class="chat-body clearfix"><div class="header"><small class=" text-muted"><span class="glyphicon glyphicon-time"></span>' + time + '</small><strong class="pull-right primary-font">Me</strong></div><p>' + message + '</p></div></li>');
+            }
+            else {
+                messageItem = $('<li class="left clearfix ' + 'chat_' + from + '"><span class="chat-img pull-left"><div style="background-color:' + colors[remotes[from].number] + ';"><span>U' + remotes[from].number + '</span></div></span><div class="chat-body clearfix"><div class="header"><strong class="primary-font">' + remotes[from].name + '</strong> <small class="pull-right text-muted"><span class="glyphicon glyphicon-time"></span>' + time + '</small></div><p>' + message + '</p></div></li>');
+            }
+            $('#chat-list').append(messageItem);
+        }
+        var chatPanel = $('.leftMenu .panel .panel-body');
+        var height = chatPanel[0].scrollHeight;
+        chatPanel.scrollTop(height);
+    }
+
+    function adjustChatHeight() {
+        var chatHeight;
+        if (remotes.numRemotes == 0) {
+            chatHeight = $('.leftMenu').height() - $('.leftMenu .panel-footer').outerHeight(true);
+        }
+        else {
+            var leftMenuHeight = $('.leftMenu').height() - $('.leftMenu .panel-footer').outerHeight(true) - $('.leftMenu .panel-heading').outerHeight(true);
+            chatHeight = leftMenuHeight - $('#usersContainer').outerHeight(true);
+        }
+        $('.leftMenu .container .panel-body').css('height', chatHeight);
+    }
+
+    function resizeLocalVideo() {
+        if (typeof localVideo != 'undefined') {
+            $('.localVideoContainer').removeAttr('style');
+            var height = $('.localVideoContainer').height();
+            var diff = (height * 100) / localVideo.videoHeight;
+            var width = localVideo.videoWidth * (diff / 100);
+            $('.localVideoContainer').css('width', width);
+            $('.localVideoContainer').css('height', height);
+        }
+    }
+
+    if (room) {
+        setRoom(room);
+    }
+    else {
+        location = '/';
+    }
+});

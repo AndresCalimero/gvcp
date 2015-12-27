@@ -1,0 +1,165 @@
+/* -------- HEADER -------- */
+.page-header-image {
+    background-image: url("/img/header.jpg");
+}
+
+.page-header::before {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    color: #ff9436;
+    font-weight: 400;
+    font-size: 4.6em;
+    text-shadow: 0 0 5px rgb(0, 0, 0);
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.title-subtitle {
+    font-size: 1.5em;
+    color: #ff7e44;
+}
+
+.create-room {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+    margin-top: 40px;
+}
+
+.create-room .input-group, .create-room .form-group {
+    margin: 0;
+}
+
+.create-room .form-control {
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid #f96332;
+    border-right: none !important;
+    color: white;
+}
+
+.create-room .form-control:focus {
+    background-color: white;
+    /*border: 1px solid #ffb84d;*/
+    color: black;
+}
+
+.create-room .btn {
+    border: 1px solid #f96332;
+    border-left: none !important;
+    margin: 0;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+.create-room .input-group-focus .btn {
+    /*border: 1px solid #ffb84d;*/
+}
+
+/* -------- END HEADER -------- */
+
+/* -------- SCROLL BAR -------- */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #555;
+}
+
+/* -------- END SCROLL BAR -------- */
+
+/* -------- FEATURES SECTION -------- */
+.section-features h2 {
+    margin-bottom: 0;
+    font-size: 3em;
+}
+
+.feature {
+    margin: 15px;
+}
+
+.feature-title {
+    margin-top: 10px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.feature-description {
+    text-align: center;
+}
+
+/* -------- END FEATURES SECTION -------- */
+
+/* -------- FEEDBACK SECTION -------- */
+.section-feedback h2 {
+    margin-bottom: 0;
+    font-size: 3em;
+}
+
+.section-feedback h5 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.feedback-form {
+    margin-top: 20px;
+}
+
+.feedback-form .radio {
+    display: inline-block;
+    margin: 0 10px;
+}
+
+.feedback-form .form-control {
+    font-size: 0.9rem;
+}
+
+.feedback-form .btn-lg {
+    color: white !important;
+    font-size: 1rem;
+}
+
+.feedback-form .input-group-addon {
+    z-index: 4;
+    font-size: 1.3rem;
+}
+
+.form-control-error {
+    border: 2px solid red;
+    border-radius: 30px;
+}
+
+/* -------- END FEEDBACK SECTION -------- */
+
+/* -------- MISC -------- */
+.rounded-circle {
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    width: 6rem;
+    height: 6rem;
+    background: none;
+    border: 0.15rem solid #dfe1e5;
+}
+
+.justify-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.divider {
+    display: block;
+    width: 6rem;
+    height: 0.3rem;
+    background-color: #dfe1e5;
+    margin: 2rem auto;
+}
+
+/* -------- END MISC -------- */
