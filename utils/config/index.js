@@ -15,7 +15,13 @@ function setDefaults(configValue) {
     return result;
 }
 
-const config = JSON.parse(fs.readFileSync('config/config.json', 'utf8'));
+let config;
+
+if (fs.existsSync('config/config.json')) {
+    config = JSON.parse(fs.readFileSync('config/config.json', 'utf8'));
+} else {
+    config = {};
+}
 
 config.debug = setDefaults(config.debug, false);
 config.url = setDefaults(config.url, 'localhost');
