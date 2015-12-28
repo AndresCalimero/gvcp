@@ -26,17 +26,17 @@ GNU Video Conferencing Platform
 
 ## What is STUN/TURN?
 
-  STUN and TURN are a set of IETF standard protocols for negotiating traversing NATs when establishing peer-to-peer communication sessions
+  STUN and TURN are a set of IETF standard protocols for negotiating traversing NATs when establishing peer-to-peer communication sessions.
 
-  A host uses Session Traversal Utilities for NAT (STUN) to discover its public IP address when it is located behind a NAT/Firewall. When this host wants to receive an incoming connection from another party, it provides this public IP address as a possible location where it can receive a connection
+  A host uses Session Traversal Utilities for NAT (STUN) to discover its public IP address when it is located behind a NAT/Firewall. When this host wants to receive an incoming connection from another party, it provides this public IP address as a possible location where it can receive a connection.
 
-  If the NAT/Firewall still won't allow the two hosts to connect directly, they make a connection to a server implementing Traversal Using Relay around NAT (TURN), which will relay media between the two parties
+  If the NAT/Firewall still won't allow the two hosts to connect directly, they make a connection to a server implementing Traversal Using Relay around NAT (TURN), which will relay media between the two parties.
 
-  A TURN server can be used as a STUN server but not otherwise
+  A TURN server can be used as a STUN server but not otherwise.
 
 ## STUN/TURN API
 
-  WebRTC requires STUN and/or TURN servers to help establish the connection between clients, you have the option to run your own turn server (you can use [rfc-5766-turn-server](https://github.com/coturn/coturn)) or use a provider like [XirSys](http://xirsys.com) which offer free plans
+  WebRTC requires STUN and/or TURN servers to help establish the connection between clients, you have the option to run your own turn server (you can use [rfc-5766-turn-server](https://github.com/coturn/coturn)) or use a provider like [XirSys](http://xirsys.com) which offer free plans.
 
   Example of **stun_turn_server_api** property using XirSys:
 
@@ -93,5 +93,4 @@ GNU Video Conferencing Platform
 }
 ```
 
-  **NOTE:** If you set the **stun_turn_server_api** property you don't need to set the **stun_servers** and **turn_servers** properties
-  
+  **NOTE:** If you set the **stun_turn_server_api** property you don't need to set the **stun_servers** and **turn_servers** properties.
