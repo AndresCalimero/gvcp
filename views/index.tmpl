@@ -1,0 +1,30 @@
+{{>_header}}
+<div class="cover">
+    <div class="background-image-fixed cover-image" style="background-image: url('/img/header.jpg')"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 class="text-primary">
+              <i class="fa fa-fw fa-weixin"></i>GVCP</h1>
+                <p class="text-info">
+                    <b>Really simple video chat for groups</b>
+                </p>
+                <br>
+                <div class="col-md-offset-4 col-md-4">
+                    <form class="shadowed" role="form" action="/" method="get">
+                        <div class="form-group">
+                            <div class="input-group input-group-lg">
+                                <input type="text" class="form-control" placeholder="Name of the room" id="roomName" name="room" autofocus="autofocus">
+                                <span class="input-group-btn">
+                                  <a class="btn btn-block btn-primary" id="join">Join <i class="fa fa-fw fa-video-camera"></i></a>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="js/main.min.js"></script>
+{{>_footer}}
