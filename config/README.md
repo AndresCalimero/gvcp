@@ -5,24 +5,24 @@ GNU Video Conferencing Platform
 
   The following table contains all the currently available configuration properties:
 
-  | Name | Default value | Description |
-  | ------------- | ------------- | ------------- |
-  | debug | false | Shows debug info in the server's console |
-  | url | localhost | The URL of the server (example: https://my-domain.com/) |
-  | secure | true | Enable HTTPS (should be enabled always) |
-  | cli | true | Command line interface for the server's console |
-  | title | GVCP | The title that shown in the website |
-  | ip | 0.0.0.0 | The listening IP (0.0.0.0 for listening in all interfaces) |
-  | port | 80 | The port for the HTTP server |
-  | ssl_port | 443 | The port for the HTTPS server |
-  | public_folder | ./public | The web server's folder |
-  | error_template | error.tmpl | The template to use when an error occurs (relative to the 'views' folder) |
-  | cache_max_age | 604800 | The maximum amount of seconds to keep the cached data |
-  | server_info | GVCP-Server | The value of the HTTP header 'server' field |
-  | stun_turn_server_api | false | The API configuration of the STUN and TURN servers provider (more info below) |
-  | stun_servers | [] | The STUN servers (more info below) |
-  | turn_servers | [] | The TURN servers (more info below) |
-  | room_capacity | 4 | The maximum capacity of rooms (-1 for unlimited capacity, not recommended) |
+| Name | Default value | Description |
+| ------------- | ------------- | ------------- |
+| debug | false | Shows debug info in the server's console |
+| url | localhost | The URL of the server (example: https://my-domain.com/) |
+| secure | true | Enable HTTPS (should be enabled always) |
+| cli | true | Command line interface for the server's console |
+| title | GVCP | The title that shown in the website |
+| ip | 0.0.0.0 | The listening IP (0.0.0.0 for listening in all interfaces) |
+| port | 80 | The port for the HTTP server |
+| ssl_port | 443 | The port for the HTTPS server |
+| public_folder | ./public | The web server's folder |
+| error_template | error.tmpl | The template to use when an error occurs (relative to the 'views' folder) |
+| cache_max_age | 604800 | The maximum amount of seconds to keep the cached data |
+| server_info | GVCP-Server | The value of the HTTP header 'server' field |
+| stun_turn_server_api | false | The API configuration of the STUN and TURN servers provider (more info below) |
+| stun_servers | [] | The STUN servers (more info below) |
+| turn_servers | [] | The TURN servers (more info below) |
+| room_capacity | 4 | The maximum capacity of rooms (-1 for unlimited capacity, not recommended) |
 
 ## What is STUN/TURN?
 
