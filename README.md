@@ -36,6 +36,7 @@ $ nvm install v5.3.0
 
 ```bash
 $ npm install gvcp
+$ cd node_modules/gvcp
 ```
 
   Configure the server (**config/config.json**):
