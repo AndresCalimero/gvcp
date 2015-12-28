@@ -5,7 +5,7 @@ This is the final project for the CS50 Course of Harvard University.
 
 ## Summary
 
-  GVCP is a web server made with **Node JS** whose main purpose is to make video conferencing easier, without having to install any software or plugin, only with a [compatible browser](http://www.webrtc.org) and a webcam.
+  GVCP is a web server made with **NodeJS** whose main purpose is to make video conferencing easier, without having to install any software or plugin, only with a [compatible browser](http://www.webrtc.org) and a webcam.
 
 ## Installation
 
@@ -25,6 +25,12 @@ $ npm install gvcp
   * HTTPS redirect
 
 ## Quick Start
+
+  Install **NodeJS v5.3.0+** using [nvm](https://github.com/creationix/nvm) **or** downloading it [here](https://nodejs.org/):
+
+```bash
+$ nvm install v5.3.0
+```
 
   Install the package:
 
