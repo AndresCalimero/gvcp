@@ -1,11 +1,11 @@
 # GVCP
 GNU Video Conferencing Platform
 
-This is the final project for the CS50 Course of Harvard University
+This is the final project for the CS50 Course of Harvard University.
 
 ## Summary
 
-  GVCP is a web server made with **Node JS** whose main purpose is to make video conferencing easier, without having to install any software or plugin, only with a [compatible browser](http://www.webrtc.org) and a webcam
+  GVCP is a web server made with **Node JS** whose main purpose is to make video conferencing easier, without having to install any software or plugin, only with a [compatible browser](http://www.webrtc.org) and a webcam.
 
 ## Installation
 
@@ -34,7 +34,7 @@ $ npm install gvcp
 
   Configure the server (**config/config.json**):
 
-  For more info about the config file go [here](config/README)
+  For more info about the config file go [here](config/README).
 
 ```js
 {
@@ -62,7 +62,7 @@ $ npm install gvcp
 
   Build the js files:
 
-  **NOTE:** This must be done every time the config file or any JavaScript template are modified
+  **NOTE:** This must be done every time the config file or any JavaScript template are modified.
 
 ```bash
 $ npm run build
