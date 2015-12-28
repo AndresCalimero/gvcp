@@ -34,7 +34,7 @@ $ npm install gvcp
 
   Configure the server (**config/config.json**):
 
-  For more info about the config file go [here](config/README).
+  For more info about the config file go [here](config/README.md).
 
 ```js
 {
