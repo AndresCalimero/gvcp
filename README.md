@@ -7,6 +7,11 @@ This is the final project for the CS50 Course of Harvard University.
 
   GVCP is a web server made with **NodeJS** whose main purpose is to make video conferencing easier, without having to install any software or plugin, only with a [compatible browser](http://www.webrtc.org) and a webcam.
 
+  GVCP uses **WebRTC** in order to be able to establish a full mesh connection between peers, that means that GVCP is not a typical 
+server-client application but a application to synchronize clients for a peer to peer connection.
+
+  For more information I encourage you to see the [presentation video](https://www.youtube.com/watch?v=prx-eAFq_h0) on YouTube.
+
 ## Installation
 
 ```bash

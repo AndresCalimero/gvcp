@@ -2,7 +2,7 @@
     "debug": true,
     "url": "https://localhost/",
     "secure": true,
-    "cli": true,
+    "cli": false,
     "title": "GVCP",
     "public_folder": "./public",
     "error_template": "error.tmpl",

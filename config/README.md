@@ -84,7 +84,7 @@ GNU Video Conferencing Platform
             "expiry": "[the expiry time]"
         },
         {
-            "url": "turn:ip:port?transport=udp",
+            "url": "turn:ip:port?transport=tcp",
             "secret": "[your secret]",
             "expiry": "[the expiry time]"
         }
