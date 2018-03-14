@@ -1,0 +1,21 @@
+{
+    "debug": true,
+    "url": "https://gvcp.herokuapp.com/",
+    "secure": false,
+    "cli": false,
+    "title": "GVCP",
+    "public_folder": "./public",
+    "error_template": "error.tmpl",
+    "cache_max_age": 604800,
+    "server_info": "GVCP-Server",
+    "stun_turn_server_api": {
+        "url": "https://service.xirsys.com/ice",
+        "ident": "shoo",
+        "secret": "13cfdd0c-ae7a-11e5-ae40-7564c5032bbc",
+        "domain": "www.gvcp.com",
+        "application": "gvcp",
+        "room": "default",
+        "secure": 1
+    },
+    "room_capacity": 4
+}
